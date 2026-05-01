@@ -28,7 +28,6 @@ yarn-error.log*
 
 # AI Models & Cache
 .cache/
-models/
 venv/
 anaconda3/
 .conda/
