@@ -1,0 +1,10 @@
+- [x] Create Voicebot Conda Environment
+- [x] Install Core Dependencies (Torch, Transformers)
+- [x] Install STT Dependencies (Whisper, webrtcvad-wheels)
+- [x] Install TTS Dependencies (Kokoro, sounddevice)
+- [x] Install System Dependencies (ffmpeg, espeak-ng)
+- [x] Implement Unified Chatbot Script (`unified_chatbot.py`)
+- [ ] Verify Full Integration (Text & Voice)
+- [x] Secure Eigo Master API with JWT Middleware
+- [x] Implement Eigo Master Frontend Auth Guard
+- [ ] Create API wrapper for Python Voicebot (optional but recommended for "Full" implementation)
