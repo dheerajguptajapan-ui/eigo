@@ -1,0 +1,8 @@
+openai-whisper
+webrtcvad-wheels
+sounddevice
+numpy
+scipy
+pydub
+kokoro>=0.9.4
+soundfile

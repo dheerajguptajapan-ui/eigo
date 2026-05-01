@@ -1,0 +1,21 @@
+{
+  "llm": {
+    "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "max_new_tokens": 150,
+    "do_sample": true,
+    "prompt_behavior": "You are a friendly and polite assistant who always replies clearly."
+  },
+  "tts": {
+    "model_id": "hexgrad/Kokoro-82M",
+    "speaker": "af_heart",
+    "lang_code": "a"
+  },
+  "stt": {
+    "model_id": "tiny",
+    "language": "en",
+    "energy_threshold": 300,
+    "pause_threshold": 0.8
+  }
+}

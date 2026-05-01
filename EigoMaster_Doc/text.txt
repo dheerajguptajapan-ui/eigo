@@ -1,0 +1,700 @@
+﻿ðŸ‡¯ðŸ‡µ  âžœ  ðŸ‡ºðŸ‡¸
+Eigo Master
+è‹±èªžãƒžã‚¹ã‚¿ãƒ¼
+English Learning App for Japanese Speakers
+Implementation & Planning Document
+Version 1.0  ï½œ  2026å¹´  ï½œ  Confidential
+1. Executive Summary
+Eigo Master (è‹±èªžãƒžã‚¹ã‚¿ãƒ¼) is a mobile-first English learning application built exclusively for Japanese native speakers. Unlike general-purpose language apps, every feature â€” explanations, hints, error feedback, and UI labels â€” is delivered in Japanese, eliminating the language barrier that causes beginners to abandon learning early.
+Mission Statement
+To guide Japanese speakers from zero English to confident, natural communication through a structured, culturally aware curriculum â€” combining spaced repetition, AI-powered conversation practice, pronunciation coaching tuned to Japanese phonetic challenges, and content grounded in real-life situations relevant to Japanese learners.
+Target: From ã€Œè‹±èªžãŒå…¨ãã‚ã‹ã‚‰ãªã„ã€to conversational fluency within 12 months of consistent daily practice.
+2. Product Overview
+2.1 The Japanese Learner Problem
+Japanese speakers face a uniquely difficult path to English fluency, driven by structural factors that generic apps ignore:
+Script gap: Japanese uses three scripts (Hiragana, Katakana, Kanji) â€” the Roman alphabet requires explicit training
+Sound system mismatch: Japanese has ~100 phonemes vs English's ~44. Sounds like L/R, V/B, TH, and consonant clusters do not exist in Japanese, causing persistent pronunciation errors
+Grammar inversion: Japanese is SOV (Subject-Object-Verb); English is SVO. Sentence construction requires mental rewiring
+Katakana interference: Loan words absorbed into Japanese as ã‚«ã‚¿ã‚«ãƒŠ (e.g., ãƒžã‚¯ãƒ‰ãƒŠãƒ«ãƒ‰ for McDonald's) create false pronunciation confidence
+Cultural hesitancy: Japanese communication norms favor silence and indirectness â€” spoken practice causes anxiety in learners
+Eigo Master addresses every one of these barriers by design.
+2.2 Target Audience Segments
+Segment
+Description
+Primary Goal
+Key Challenge
+å®Œå…¨åˆå¿ƒè€… (Beginner)
+No prior English; alphabet unfamiliar
+Read & write Roman alphabet; 500 core words
+Script anxiety; zero confidence
+åˆç´š (Elementary)
+Knows alphabet; basic greetings only
+Daily phrases, shopping, travel English
+L/R confusion; verb tenses
+ä¸­ç´š (Intermediate)
+Can read but cannot speak fluently
+Hold a 5-min conversation naturally
+Speaking hesitancy; listening speed
+ä¸Šç´š (Advanced)
+Conversational; targeting business/exam
+Business English; TOEIC/TOEFL readiness
+Formal register; idiomatic English
+2.3 Platforms
+iOS 16+ â€” Swift / SwiftUI (primary launch platform)
+Android 11+ â€” Kotlin / Jetpack Compose
+Web â€” Next.js 14 (Progressive Web App for desktop study sessions)
+2.4 Language Policy
+UI Language Rule
+ALL menus, instructions, error messages, hints, and explanations are written in Japanese (æ—¥æœ¬èªž).
+English appears ONLY as the content being learned â€” never as UI chrome.
+Grammar explanations contrast English and Japanese structures side-by-side.
+Level labels use Japanese names: åˆå¿ƒè€…, åˆç´š, ä¸­ç´š, ä¸Šç´š.
+3. Curriculum Design
+3.1 Learning Framework
+The curriculum is structured around the CEFR (Common European Framework of Reference) mapped to familiar Japanese equivalents, and aligned with TOEIC/TOEFL band targets:
+App Level
+CEFR
+TOEIC Target
+Vocabulary Target
+Duration (avg)
+åˆå¿ƒè€… Beginner
+Pre-A1
+â€”
+500 words
+2â€“3 months
+åˆç´š Elementary
+A1â€“A2
+220â€“550
+1,500 words
+3â€“4 months
+ä¸­ç´š Intermediate
+B1
+550â€“730
+3,500 words
+4â€“5 months
+ä¸Šç´š Advanced
+B2
+730â€“900+
+6,000 words
+4â€“6 months
+3.2 Lesson Tree Structure
+Content is organized into a branching skill tree with prerequisite gating. The tree has four tracks running in parallel â€” Vocabulary, Grammar, Speaking, and Listening â€” with cross-track dependencies (e.g., completing 'Greetings Vocabulary' unlocks 'Greetings Speaking Practice').
+Each level contains 10 Units; each Unit contains 6â€“8 Lessons
+Each Lesson: 5â€“12 exercises, estimated 8â€“15 minutes to complete
+Checkpoint tests every 2 units (requires 75% to advance)
+Level-end exam unlocks next level (requires 80%)
+Lessons can be replayed; best score is recorded
+3.3 Japanese-Specific Curriculum Modules
+In addition to standard English content, Eigo Master includes modules targeting Japanese-speaker pain points:
+Module
+Japanese Challenge Addressed
+Content
+Roman Alphabet Bootcamp
+No familiarity with the Latin alphabet
+Letter names, uppercase/lowercase, phonics, typing practice
+L vs R Mastery
+Japanese /r/ sound replaces both
+Minimal pair drills, mouth-position diagrams (in Japanese), shadowing
+TH Sound Training
+No TH in Japanese phonology
+Voiced (this) vs unvoiced (think) distinction; tongue placement exercises
+V / B Distinction
+Japanese uses ãƒ for both V and B sounds
+Audio discrimination drills; recording + feedback
+Consonant Clusters
+Japanese is (C)V structured â€” no clusters
+Progressive cluster drills: st, str, spl, etc.
+ã‚«ã‚¿ã‚«ãƒŠ Interference Fix
+False friends from Loan Words
+Side-by-side comparison: Japanese vs actual English pronunciation
+Article Master (a/an/the)
+Japanese has no articles
+Rule-based explanation in Japanese + 200 targeted exercises
+Tense Rewiring
+Japanese tense is minimal and contextual
+Visual timeline diagrams; 12 English tenses with Japanese contrastive notes
+Long Sentence Inversion
+SOV â†’ SVO mental switch
+Sentence reconstruction exercises; translation drills
+4. Core Feature Implementation
+4.1 Vocabulary & Flashcards (å˜èªžãƒ»ãƒ•ãƒ©ãƒƒã‚·ãƒ¥ã‚«ãƒ¼ãƒ‰)
+Eigo Master uses a modified SM-2 Spaced Repetition System (SRS) to schedule vocabulary reviews at the optimal moment before forgetting.
+SRS Scheduling Algorithm
+Each card tracks: ease factor (EF), interval (days), review count
+New card â†’ interval = 1 day
+After review:
+  â€¢ ã€Œã‚‚ã†ä¸€åº¦ã€(Again, rating 1): reset to 1 day, EF âˆ’0.2
+  â€¢ ã€Œé›£ã—ã„ã€(Hard, rating 2): interval Ã— 1.2, EF unchanged
+  â€¢ ã€Œæ™®é€šã€(Good, rating 3): interval Ã— EF
+  â€¢ ã€Œç°¡å˜ã€(Easy, rating 4): interval Ã— EF Ã— 1.3, EF +0.15
+EF clamped to [1.3, 2.5]. Daily new card limit: 20 (configurable)
+Daily review limit: 100 (configurable). Morning push notification when reviews are due.
+Card Content
+Front: English word + phonetic transcription (IPA) + audio button
+Back: Japanese translation + example sentence (English + Japanese) + part of speech
+Kanji readings shown for Japanese translations where applicable
+Cards organized into themed decks: æ—…è¡Œ (Travel), ä»•äº‹ (Business), æ—¥å¸¸ä¼šè©± (Daily Life), TOEIC, etc.
+3,000 pre-built cards at launch; 6,000 target by v1.5
+User can add custom cards from any lesson or dictionary lookup
+4.2 Grammar Lessons (æ–‡æ³•ãƒ¬ãƒƒã‚¹ãƒ³)
+Every grammar lesson is written entirely in Japanese with clear contrastive explanations that explicitly highlight the Japanese-to-English structural difference.
+Lesson Format
+æ¦‚å¿µèª¬æ˜Ž (Concept Explanation) â€” Japanese explanation of the grammar rule with Japanese example sentence for context
+è‹±èªžæ§‹é€  (English Structure) â€” visual sentence diagram comparing English word order to Japanese
+ä¾‹æ–‡ (Examples) â€” 5â€“8 examples with Japanese translation, audio, and breakdown
+ç·´ç¿’å•é¡Œ (Exercises) â€” mixed exercise types (see below)
+ã‚ˆãã‚ã‚‹ãƒŸã‚¹ (Common Mistakes) â€” explicit list of errors Japanese speakers make, with corrections
+Exercise Types
+ä¸¦ã¹æ›¿ãˆ (Scrambled Words) â€” drag-and-drop word order reconstruction
+ç©´åŸ‹ã‚ (Fill in the Blank) â€” keyboard or word-bank input
+é¸æŠžå•é¡Œ (Multiple Choice) â€” select the correct English form
+ç¿»è¨³ (Translation) â€” Japanese â†’ English free-text input (AI-graded)
+èª¤æ–‡ä¿®æ­£ (Error Correction) â€” identify and fix the mistake in a sentence
+4.3 Speaking & Pronunciation (ã‚¹ãƒ”ãƒ¼ã‚­ãƒ³ã‚°ãƒ»ç™ºéŸ³)
+Speaking practice is the most anxiety-inducing skill for Japanese learners. Eigo Master reduces friction with private recording, immediate AI feedback in Japanese, and gamified repetition drills.
+Pronunciation Scoring Engine
+Learner records audio via device microphone
+Audio sent to Pronunciation Service (Python / FastAPI)
+Analysis pipeline: noise reduction â†’ phoneme segmentation (wav2vec2, Japanese-English cross-lingual model) â†’ phoneme comparison against native reference
+Scores returned: Overall (0â€“100), Phoneme Accuracy, Rhythm & Stress, Intonation
+Error report shown in Japanese: specific phonemes missed, visual mouth-position guide
+Pitch accent pattern visualized as waveform overlay (native vs learner)
+Shadowing Mode (ã‚·ãƒ£ãƒ‰ãƒ¼ã‚¤ãƒ³ã‚°)
+Learner listens to a native speaker sentence, then speaks immediately after
+Three speeds: ã‚†ã£ãã‚Š (slow 70%), æ™®é€š (normal 100%), é€Ÿã„ (fast 130%)
+After 3 rounds, scoring unlocked â€” learner must beat target score to advance
+Pronunciation Focus Drills
+Drill Name
+Target Sound
+Exercise Format
+L/R Distinction
+/l/ vs /r/ (light/right, lake/rake)
+Minimal pair audio: identify + record
+TH Trainer
+Î¸ (think) and Ã° (this)
+Slow-motion audio + tongue diagram + record
+V/B Separator
+/v/ (very) vs /b/ (berry)
+Audio discrimination + shadowing
+ã‚·ãƒ¥ãƒ¯ãƒ¼ (Schwa) Master
+Unstressed vowel /É™/ (about, the)
+Stress pattern exercises; schwa highlight
+Ending Sounds
+Word-final consonants Japanese speakers drop
+Focused record + AI highlight of dropped phoneme
+Cluster Buster
+Consonant clusters (str, spl, thr)
+Progressive build-up drills
+4.4 Listening Exercises (ãƒªã‚¹ãƒ‹ãƒ³ã‚°)
+Listening is the fastest path to comprehension improvement. All listening content is produced by native English speakers across American, British, and Australian accents â€” with progressive difficulty.
+Content Types
+å˜èªžãƒªã‚¹ãƒ‹ãƒ³ã‚° (Word Listening) â€” hear a word, select from 4 Japanese translations
+æ–‡ãƒªã‚¹ãƒ‹ãƒ³ã‚° (Sentence Listening) â€” hear a sentence, type or select the English text
+ä¼šè©±ç†è§£ (Dialogue Comprehension) â€” short realistic dialogues (30â€“90 sec) with 3â€“5 comprehension questions in Japanese
+ç©´åŸ‹ã‚ãƒ‡ã‚£ã‚¯ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ (Dictation Fill-in) â€” listen and type the missing word(s) in a transcript
+é€Ÿåº¦ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚° (Speed Training) â€” same passage at 3 speeds; goal is to understand at 130%
+Accent Coverage
+American English â€” primary accent for all vocabulary and grammar content
+British English â€” introduced at Intermediate level; 30% of advanced listening content
+Australian English â€” Advanced level only; 1 dedicated unit on accent recognition
+All audio produced by contracted native speakers (SAG-AFTRA equivalent quality standards)
+Learner Accessibility Feature
+All listening exercises include:
+â€¢ Japanese subtitles toggle (åˆå¿ƒè€…ãƒ»åˆç´š default ON, ä¸­ç´š default OFF)
+â€¢ Playback speed slider (50% â€“ 150%)
+â€¢ Loop button for difficult sections
+â€¢ Auto-pause after each sentence mode for dictation practice
+4.5 Reading & Writing (èª­ã¿æ›¸ã)
+Reading
+Graded reading passages aligned to CEFR level (A1â€“B2)
+Topics chosen for relevance to Japanese learners: travel, workplace emails, menus, signs, social media, news headlines
+Tap-to-translate: tap any English word to see Japanese definition + part of speech
+Comprehension questions in Japanese after each passage
+Vocabulary encountered in reading automatically added to SRS review queue
+Writing
+Free-text English composition graded by AI (grammar, vocabulary, coherence)
+Feedback delivered in Japanese: corrections highlighted, explanations given
+Structured writing prompts at each level (e.g., Beginner: 'Write 3 sentences about yourself'; Advanced: 'Write a 200-word business email')
+Keyboard assistance: built-in Roman alphabet keyboard for Beginner learners unfamiliar with mobile English input
+ã€Œè‹±æ–‡æ—¥è¨˜ã€(English Diary) feature: daily optional writing practice with AI feedback
+4.6 AI Conversation Practice (AIã¨ã®ä¼šè©±ç·´ç¿’)
+The AI conversation partner allows learners to practice speaking and typing English in realistic scenarios â€” privately, without fear of embarrassment â€” with a tutor that responds in a supportive, Japanese-friendly style.
+Implementation
+Backend: GPT-4o with structured system prompt injection
+System prompt includes: learner level, known vocabulary list, scenario context, instruction to respond in English at appropriate level, and to provide Japanese corrections after each exchange
+Learner input: text (any level) or voice (Intermediate+)
+AI response: English reply + optional Japanese translation toggle + grammar note if an error was detected
+Scenario Library
+Scenario
+Japanese Name
+Level
+Example Exchange
+Airport Check-in
+ç©ºæ¸¯ã§ã®ãƒã‚§ãƒƒã‚¯ã‚¤ãƒ³
+åˆç´š+
+Checking in a bag, asking about gate
+Restaurant Ordering
+ãƒ¬ã‚¹ãƒˆãƒ©ãƒ³ã§æ³¨æ–‡
+åˆç´š+
+Ordering food, asking about allergens
+Hotel Reception
+ãƒ›ãƒ†ãƒ«ã®ãƒ•ãƒ­ãƒ³ãƒˆ
+åˆç´š+
+Check-in, requesting items, complaints
+Shopping & Returns
+è²·ã„ç‰©ã¨è¿”å“
+åˆç´š+
+Asking for sizes, making a return
+Job Interview
+å°±è·é¢æŽ¥
+ä¸­ç´š+
+Answering common interview questions
+Business Meeting
+ãƒ“ã‚¸ãƒã‚¹ä¼šè­°
+ä¸­ç´š+
+Presenting, asking/answering questions
+Small Talk
+é›‘è«‡
+ä¸­ç´š+
+Weather, weekend plans, local events
+Doctor / Hospital
+ç—…é™¢ã§ã®ä¼šè©±
+ä¸­ç´š+
+Describing symptoms, understanding instructions
+Email Writing Tutor
+ãƒ¡ãƒ¼ãƒ«ä½œæˆç·´ç¿’
+ä¸Šç´š
+Drafting and refining formal emails
+Debate & Opinion
+æ„è¦‹äº¤æ›ãƒ»è¨Žè«–
+ä¸Šç´š
+Arguing a position, agreeing/disagreeing formally
+Post-Conversation Review
+Session transcript shown in full (English + Japanese translation)
+AI highlights: grammar errors (èµ¤), vocabulary improvements (é’), natural phrasing suggestions (ç·‘)
+Score: Fluency, Accuracy, Vocabulary Range, Task Completion (1â€“5 each)
+New vocabulary from conversation added to SRS deck automatically
+5. Technical Architecture
+5.1 System Overview
+Technology Stack
+Mobile: React Native (Expo SDK 51) â€” iOS & Android from single codebase
+Web: Next.js 14 (App Router) + TypeScript â€” Progressive Web App
+Backend API: Node.js 20 + Express â€” REST + WebSocket
+AI Services: Python 3.12 + FastAPI â€” pronunciation scoring, conversation grading
+Database: PostgreSQL 16 (user/progress) + MongoDB 7 (content) + Redis 7 (cache/session)
+AI Models: OpenAI GPT-4o (conversation), custom wav2vec2 fine-tune (pronunciation)
+Infrastructure: AWS â€” ECS Fargate, RDS, ElastiCache, S3, CloudFront, Cognito
+CI/CD: GitHub Actions â†’ ECR â†’ ECS rolling deploy
+5.2 Frontend Architecture
+React Native (Mobile)
+Navigation: React Navigation v6 â€” bottom tab (5 tabs) + nested stack
+State management: Zustand (global: auth, settings, streak) + React Query (server state, caching)
+Offline storage: WatermelonDB (SQLite) â€” lessons, SRS cards, cached audio
+Offline sync: background queue flushes review results and XP on reconnect
+Audio: Expo AV for playback; expo-speech + device microphone for recording
+Animations: React Native Reanimated 3 â€” flashcard flip, lesson completion, streak animations
+Canvas / Drawing: react-native-skia for pronunciation waveform visualization
+Web App (Next.js)
+Server Components for lesson content pages; Client Components for interactive exercises
+PWA: service worker caches lesson content and vocabulary for offline use
+Audio: Web Audio API for waveform visualization; MediaRecorder for pronunciation capture
+Styling: Tailwind CSS + shadcn/ui component primitives
+5.3 Backend Services
+Service
+Stack
+Responsibility
+Auth Service
+Node.js / Express
+Registration, login, JWT + refresh tokens, OAuth2 (Google, Apple, LINE)
+Content Service
+Node.js / Express
+Lesson data, vocabulary, grammar rules served from MongoDB with Redis cache
+Progress Service
+Node.js / Express
+XP, level, streak, SRS card states â€” PostgreSQL
+SRS Scheduler
+Node.js (cron)
+Calculates due cards, sends push notification triggers
+AI Conversation
+Python / FastAPI
+GPT-4o system prompt injection, transcript storage, session grading
+Pronunciation Engine
+Python / FastAPI
+Audio analysis: wav2vec2 phoneme comparison, pitch extraction, scoring
+Notification Service
+Node.js
+FCM (Android), APNs (iOS), Web Push â€” streak reminders, review alerts
+Analytics Service
+Python / FastAPI
+Event ingestion, learning metric aggregation, A/B test assignment
+5.4 Database Schema (Key Tables)
+Table
+Key Columns
+users
+id, email, display_name, created_at, current_level, streak_count, timezone, ui_language (always 'ja')
+vocabulary_items
+id, english_word, ipa_phonetic, japanese_translation, audio_url, cefr_level, frequency_rank, part_of_speech, example_en, example_ja
+user_srs_cards
+id, user_id, item_id, item_type, due_date, interval_days, ease_factor, review_count, last_reviewed_at
+lessons
+id, unit_id, title_ja, level, track (vocab/grammar/speaking/listening), exercise_count, xp_reward
+lesson_progress
+id, user_id, lesson_id, status, score_pct, xp_earned, completed_at, attempt_count
+conversation_sessions
+id, user_id, scenario_id, transcript_json, fluency_score, accuracy_score, vocab_score, task_score, duration_secs
+pronunciation_attempts
+id, user_id, target_text, audio_s3_key, overall_score, phoneme_score, rhythm_score, intonation_score, errors_json
+user_xp_log
+id, user_id, amount, source_type, source_id, earned_at
+5.5 API Endpoints (Key)
+Method + Path
+Purpose
+Key Parameters / Response
+POST /auth/register
+New user registration
+email, password, display_name â†’ user_id, JWT
+POST /auth/login
+Authenticate user
+email, password â†’ JWT + refresh_token
+GET /lessons?level=&track=
+List lessons
+level (beginnerâ€“advanced), track â†’ lesson list
+GET /lessons/:id
+Fetch lesson content
+lesson_id â†’ exercises, metadata, audio_urls
+POST /lessons/:id/complete
+Submit lesson result
+answers[], time_ms â†’ xp_earned, mistakes, next_lesson_id
+GET /srs/due
+Get due flashcards
+limit, deck_type â†’ card list with front/back/audio
+POST /srs/review
+Submit card review
+card_id, rating (1â€“4) â†’ next_due_date, updated_interval
+POST /conversation/start
+Begin AI conversation
+scenario_id â†’ session_id, opening_message
+POST /conversation/:id/message
+Send message to AI
+text / audio_base64 â†’ ai_reply, correction, japanese_note
+POST /pronunciation/score
+Analyze recording
+audio_base64, target_text â†’ scores{}, errors[], feedback_ja
+GET /user/dashboard
+User progress summary
+â†’ level, xp, streak, srs_due_count, recent_scores
+POST /user/settings
+Update preferences
+daily_goal_mins, new_card_limit, notification_time
+6. UX & UI Design Principles
+6.1 Design Philosophy
+æ—¥æœ¬èªžãƒ•ã‚¡ãƒ¼ã‚¹ãƒˆ (Japanese-First): Every UI label, tooltip, error, and guide is in Japanese
+ä½Žä¸å®‰è¨­è¨ˆ (Low-Anxiety Design): Mistakes are framed as learning opportunities (ãƒŠã‚¤ã‚¹ãƒãƒ£ãƒ¬ãƒ³ã‚¸ï¼), not failures
+Minimal English in chrome: Learners should not need to read English to navigate the app
+Clarity over density: Clean layouts with generous whitespace â€” avoid overwhelming beginners
+Consistency: Uniform exercise patterns so learners focus on content, not interface
+6.2 Core Screens
+Screen
+Japanese Name
+Key Elements
+Home / Dashboard
+ãƒ›ãƒ¼ãƒ 
+Daily streak, XP bar, due SRS count, today's recommended lesson, motivational message in Japanese
+Skill Tree
+ã‚¹ã‚­ãƒ«ãƒ„ãƒªãƒ¼
+Visual lesson tree; locked/unlocked/completed states; level sections separated by checkpoint gates
+Lesson Player
+ãƒ¬ãƒƒã‚¹ãƒ³
+Progress bar, exercise type label in Japanese, answer input, hint button (Japanese hint), XP earned on completion
+Flashcard Review
+å¾©ç¿’
+Card flip animation; 4-button rating (ã‚‚ã†ä¸€åº¦ / é›£ã—ã„ / æ™®é€š / ç°¡å˜); session summary
+Speaking Practice
+ã‚¹ãƒ”ãƒ¼ã‚­ãƒ³ã‚°
+Waveform display; record button; playback; score breakdown in Japanese; retry option
+AI Conversation
+ä¼šè©±ç·´ç¿’
+Chat bubble UI; Japanese translation toggle; post-session review panel
+Listening
+ãƒªã‚¹ãƒ‹ãƒ³ã‚°
+Audio player with speed control; transcript (toggleable); answer input below
+Progress / Stats
+å­¦ç¿’è¨˜éŒ²
+Streak calendar, XP timeline, level progress, vocabulary mastered count, weak areas radar chart
+Settings
+è¨­å®š
+Daily goal, notification time, card limits, account management â€” all labels in Japanese
+6.3 Accessibility
+WCAG 2.1 AA compliance â€” minimum 4.5:1 contrast ratio for all text
+Full VoiceOver (iOS) and TalkBack (Android) support with Japanese accessibility labels
+Minimum touch target: 44Ã—44pt for all interactive elements
+Dynamic Type: respects system font size settings (iOS) and font scale (Android)
+All audio content has Japanese text transcripts
+Color-blind safe palette: error/success states use both color and icon shape
+7. Gamification & Motivation
+7.1 XP System
+Action
+XP Reward
+Note
+Lesson Complete (first time)
++50 XP + accuracy bonus
+Bonus: +25 XP for perfect score
+SRS Review Batch (20 cards)
++10 XP
+Capped at 5 batches/day
+AI Conversation Session
++40 XP
+Minimum 5 exchanges required
+Pronunciation Score â‰¥ 80
++20 XP bonus
+Per speaking exercise
+Perfect Listening Exercise
++15 XP bonus
+â€”
+Daily Goal Achieved
++30 XP bonus
+All goals: 5, 10, 15, 20 min options
+7-Day Streak
++100 XP
+Milestone bonus
+30-Day Streak
++500 XP
+Milestone bonus
+Level-Up Exam Passed
++200 XP
+â€”
+7.2 Level Titles
+XP Range
+Title (Japanese)
+Title (English)
+0 â€“ 500
+è‹±èªžã®åµ (Tamago)
+English Egg
+501 â€“ 2,000
+ã²ã‚ˆã“ (Hiyoko)
+Baby Chick
+2,001 â€“ 5,000
+è‹±èªžã®ç¨® (Tane)
+English Seed
+5,001 â€“ 10,000
+è‹±èªžã®èŠ½ (Me)
+English Sprout
+10,001 â€“ 20,000
+è‹±èªžã®èŠ± (Hana)
+English Flower
+20,001 â€“ 40,000
+è‹±èªžã®å®Ÿ (Mi)
+English Fruit
+40,001 â€“ 70,000
+è‹±èªžã®æœ¨ (Ki)
+English Tree
+70,001+
+è‹±èªžã®é”äºº (Tatsujin)
+English Master
+7.3 Streak & Retention Mechanics
+æ¯Žæ—¥ã®ç›®æ¨™ (Daily Goal): configurable â€” 5 / 10 / 15 / 20 minutes or custom
+ã‚¹ãƒˆãƒªãƒ¼ã‚¯ã‚·ãƒ¼ãƒ«ãƒ‰ (Streak Shield): earned at 7, 30, 90-day milestones; protects streak for 1 missed day (max 2 stored)
+ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ (Reminders): smart push notification timing based on user's historically active hour
+æœˆæ¬¡ãƒãƒ£ãƒ¬ãƒ³ã‚¸ (Monthly Challenge): e.g., 'ä»Šæœˆ100å˜èªžè¦šãˆã‚ˆã†ï¼', 'ä¼šè©±ç·´ç¿’ã‚’5å›žã—ã‚ˆã†ï¼'
+å‹é”ãƒ©ãƒ³ã‚­ãƒ³ã‚° (Friend Leaderboard): opt-in weekly XP leaderboard among friends (LINE integration for sharing)
+8. Content & Audio Pipeline
+8.1 Vocabulary & Grammar Sources
+Core vocabulary: Oxford 3000 + Academic Word List, filtered and organized by CEFR level
+TOEIC vocabulary: Official TOEIC Institute word lists (N500, N1000, N1500 frequency tiers)
+Japanese translations: EDICT/JMdict (open-license Japanese-English dictionary) + editorial review by certified Japanese-English translators
+Grammar explanations: 100% original authored content by CELTA/DELTA-certified teachers with Japanese-speaker specialization
+Example sentences: Original, curated â€” no machine-translated content in learner-facing material
+8.2 Audio Production
+All vocabulary and grammar audio recorded by contracted native speakers (American English primary accent)
+British and Australian accent content recorded by separate native speaker contractors
+Listening dialogue scripts written by native speakers and reviewed for naturalness and cultural accuracy
+Audio format: MP3 (192kbps) + OGG fallback; stored on AWS S3, delivered via CloudFront CDN
+Target library: 6,000 vocabulary audio files + 500 dialogue segments at launch
+8.3 Content Management System
+CMS: Strapi (self-hosted) â€” role-based access for Admins, Content Editors, Language Reviewers, QA
+Workflow: Draft â†’ Review â†’ Approved â†’ Published; full change history
+Lesson builder: WYSIWYG editor for exercise creation with real-time preview
+Bulk import: vocabulary via CSV upload with automated validation pipeline
+Content export: Strapi webhooks trigger MongoDB update + Redis cache invalidation on publish
+9. Offline Mode & Data Synchronization
+Japanese learners often study during commutes (é›»è»Šã®ä¸­) â€” offline capability for core features is essential.
+Feature
+Offline Support
+Notes
+SRS Flashcard Reviews
+Full offline
+Cards cached locally; results synced on reconnect via queue
+Downloaded Lessons
+Full offline
+User initiates download per unit; stored in WatermelonDB
+Audio Playback
+Offline if downloaded
+Auto-download audio for next 2 units when on Wi-Fi
+AI Conversation
+Not supported
+Requires API call; banner shown with grammar exercise fallback
+Pronunciation Scoring
+Not supported
+Requires server-side model; local recording saved for sync later
+Progress Sync
+Offline queue
+XP and progress queued locally; bulk sync on reconnect
+Leaderboard
+Not supported
+Requires live data; cached last-known state displayed
+Sync conflict resolution: last-write-wins for progress; server is authoritative for content versions
+Offline indicator shown in top-right of screen with estimated sync queue count
+Background fetch (iOS) / WorkManager (Android) attempt sync every 15 minutes when app is backgrounded
+10. Monetization Strategy
+10.1 Free Tier (ç„¡æ–™ãƒ—ãƒ©ãƒ³)
+Access to Beginner level (åˆå¿ƒè€…) â€” all units
+SRS capped at 30 reviews / day
+3 AI conversation sessions per month
+No pronunciation scoring (listen-only mode)
+Elementary level: first 2 units only (paywall at unit 3)
+10.2 Eigo Master Plus (ãƒ—ãƒ¬ãƒŸã‚¢ãƒ ãƒ—ãƒ©ãƒ³)
+Full access to all 4 levels and all tracks
+Unlimited SRS reviews; configurable daily limits
+Unlimited AI conversation sessions (all 10 scenarios)
+Full pronunciation scoring with phoneme-level feedback
+Offline lesson and audio downloads
+Friend leaderboard and LINE sharing
+TOEIC/TOEFL preparation module
+Price: Â¥980/æœˆ (monthly) or Â¥5,800/å¹´ (annual â€” 51% saving)
+Payment Integration
+iOS: Apple StoreKit 2 â€” in-app purchase with server-side receipt validation
+Android: Google Play Billing Library 6 â€” purchase token server validation
+Web: Stripe â€” recurring subscription with Japanese locale support (Â¥ currency)
+LINE Pay: Optional integration for Japanese users preferring LINE ecosystem payments
+Receipt validation handled by Auth Service before premium flag is set on user record
+11. Security & Privacy
+Authentication: JWT (15-min expiry) + rotating refresh tokens (7-day); HttpOnly cookies (web), iOS Keychain / Android Keystore (mobile)
+Transport: TLS 1.3 enforced on all endpoints; HSTS preloaded
+Audio data: pronunciation recordings purged from S3 within 24 hours of scoring; opt-in to retain for model improvement
+Japanese Privacy Law (å€‹äººæƒ…å ±ä¿è­·æ³• â€” APPI) compliance: data export and deletion available in-app within 72 hours
+GDPR compliance for EU residents: consent log, right to erasure, data portability
+PCI DSS: no card data stored; all payment tokenized by Stripe / Apple / Google
+Dependency scanning: Snyk in CI pipeline; SAST via CodeQL on all PRs
+Penetration testing: quarterly by third-party security firm
+12. Analytics & Monitoring
+12.1 Learning Analytics Events
+Event
+Properties
+lesson_started
+lesson_id, level, track, user_level, session_id
+lesson_completed
+lesson_id, score_pct, xp_earned, time_ms, mistake_count
+srs_reviewed
+card_id, rating, interval_before, interval_after, time_ms
+pronunciation_recorded
+target_text, overall_score, phoneme_errors[], level
+conversation_message_sent
+session_id, scenario_id, message_length, contains_error
+streak_broken
+streak_days_lost, had_shield, time_of_day
+paywall_hit
+lesson_id, level, screen, user_streak, user_xp
+subscription_started
+plan_type, price, currency, source_platform
+12.2 System Monitoring
+APM: Datadog â€” service latency, error rates, API throughput
+Error tracking: Sentry â€” frontend (RN + Next.js) + backend (Node + Python) with release tracking
+Uptime: Pingdom synthetic checks on 5 critical flows (login, lesson load, SRS review, conversation start, pronunciation score)
+Alerting: PagerDuty on-call; P0 (service down) < 5min response; P1 (degraded) < 30min
+SLA target: 99.9% monthly uptime on all core learning APIs
+13. Testing Strategy
+Test Type
+Tooling
+Target
+Unit Tests
+Jest (JS/TS), pytest (Python)
+SRS algorithm, scoring logic, API controllers â€” 80% coverage
+Integration Tests
+Supertest, pytest-httpx
+API contracts, DB interactions, auth flows
+E2E Tests (Mobile)
+Detox
+Onboarding, lesson completion, SRS session, subscription flow
+E2E Tests (Web)
+Playwright
+Same critical journeys on Chrome, Safari, Firefox
+Accessibility Tests
+axe-core, Maestro
+Automated a11y scan on all screens per release
+Localisation Tests
+Manual + screenshot diff
+All UI labels confirm Japanese rendering correctly
+Performance Tests
+k6
+API load test: P95 < 300ms at 15,000 concurrent users
+Audio Pipeline Tests
+pytest + test fixtures
+Pronunciation scoring consistency and regression tests
+Device Testing
+BrowserStack Real Devices
+iOS: 15 devices (iPhone SE â†’ iPhone 16 Pro Max); Android: 25 devices
+14. Development Roadmap
+14.1 Phased Milestones
+Phase
+Duration
+Deliverables
+Phase 1 â€” Foundation
+Months 1â€“3
+Auth, CMS, SRS engine, Beginner level (å…¨åˆå¿ƒè€…ã‚³ãƒ³ãƒ†ãƒ³ãƒ„), vocabulary deck (500 words), audio pipeline
+Phase 2 â€” Core Curriculum
+Months 4â€“6
+Elementary level, pronunciation scoring MVP, L/R and TH drills, listening exercises
+Phase 3 â€” AI Features
+Months 7â€“8
+AI conversation partner (5 scenarios), post-session grading, Intermediate level content
+Phase 4 â€” Advanced + Polish
+Month 9
+Advanced level, business English module, TOEIC prep, gamification, offline sync
+Phase 5 â€” Beta & Launch
+Month 10
+Closed beta (500 Japanese learners), accessibility audit, app store submission, marketing launch
+Phase 6 â€” Growth
+Months 11â€“12
+British/Australian accent content, LINE Pay integration, friend leaderboard, v1.5 content expansion
+14.2 Team Structure
+1 Ã— Product Manager (Japanese-English bilingual strongly preferred)
+1 Ã— Tech Lead / Architect
+3 Ã— Mobile Engineers â€” React Native (Expo)
+2 Ã— Backend Engineers â€” Node.js + Python
+1 Ã— ML Engineer â€” wav2vec2 pronunciation model fine-tuning
+1 Ã— UX/UI Designer (Japanese UX patterns experience preferred)
+1 Ã— QA Engineer
+2 Ã— Content Writers / Curriculum Designers (CELTA/DELTA certified, Japanese L1)
+1 Ã— Native Speaker Audio Director + contracted voice talent
+1 Ã— Japanese Translator / Localization Specialist
+15. Appendix â€” Glossary
+Term
+Definition
+SRS (ã‚¹ãƒšãƒ¼ã‚¹ãƒ‰ãƒ»ãƒ¬ãƒšãƒ†ã‚£ã‚·ãƒ§ãƒ³)
+Spaced Repetition System â€” algorithm scheduling reviews at optimal intervals for long-term memory retention
+SM-2
+SuperMemo 2 â€” the foundational spaced repetition algorithm (Wozniak, 1987) that EigoMaster's SRS is based on
+CEFR
+Common European Framework of Reference â€” A1 (beginner) to C2 (mastery); universal language proficiency standard
+TOEIC
+Test of English for International Communication â€” the most common English proficiency exam in Japan
+IPA
+International Phonetic Alphabet â€” standardized symbols for representing pronunciation (e.g., /l/, /r/, /Î¸/)
+Shadowing (ã‚·ãƒ£ãƒ‰ãƒ¼ã‚¤ãƒ³ã‚°)
+A speaking technique where learners speak simultaneously with or immediately after a native speaker recording
+Schwa /É™/
+The most common English vowel sound â€” unstressed, central â€” does not exist in Japanese; critical for natural English
+ã‚«ã‚¿ã‚«ãƒŠå¹²æ¸‰ (Katakana Interference)
+When English loanwords absorbed into Japanese as Katakana create false pronunciation expectations for learners
+SOV / SVO
+Subject-Object-Verb (Japanese) vs Subject-Verb-Object (English) â€” the fundamental word-order difference
+wav2vec2
+Facebook AI's speech representation model used as the base for EigoMaster's pronunciation scoring engine
+GPT-4o
+OpenAI's multimodal language model used to power the AI conversation partner feature
+JWT
+JSON Web Token â€” a secure, compact token format used for user authentication between client and server
+PWA
+Progressive Web App â€” web application with native-app capabilities including offline access and home screen installation
+APPI (å€‹äººæƒ…å ±ä¿è­·æ³•)
+Act on Protection of Personal Information â€” Japan's primary data privacy law, equivalent to GDPR

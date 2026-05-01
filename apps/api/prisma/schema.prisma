@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password_hash String
+  display_name  String
+  created_at    DateTime  @default(now())
+  current_level String    @default("beginner")
+  streak_count  Int       @default(0)
+  timezone      String    @default("Asia/Tokyo")
+  ui_language   String    @default("ja")
+
+  srs_cards       UserSRSCard[]
+  lesson_progress LessonProgress[]
+}
+
+model VocabularyItem {
+  id                   String   @id @default(uuid())
+  english_word         String
+  ipa_phonetic         String?
+  japanese_translation String
+  audio_url            String?
+  cefr_level           String
+  frequency_rank       Int?
+  part_of_speech       String
+  example_en           String?
+  example_ja           String?
+
+  srs_cards UserSRSCard[]
+}
+
+model UserSRSCard {
+  id               String   @id @default(uuid())
+  user_id          String
+  item_id          String
+  item_type        String   @default("vocabulary") // vocabulary, grammar, etc.
+  due_date         DateTime @default(now())
+  interval_days    Float    @default(1.0)
+  ease_factor      Float    @default(2.5)
+  review_count     Int      @default(0)
+  last_reviewed_at DateTime?
+
+  user            User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  vocabulary_item VocabularyItem @relation(fields: [item_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id, due_date])
+}
+
+model Lesson {
+  id             String   @id @default(uuid())
+  unit_id        String
+  title_ja       String
+  level          String
+  track          String   // vocab, grammar, speaking, listening
+  exercise_count Int      @default(0)
+  xp_reward      Int      @default(50)
+
+  progress LessonProgress[]
+}
+
+model LessonProgress {
+  id            String    @id @default(uuid())
+  user_id       String
+  lesson_id     String
+  status        String    @default("in_progress") // in_progress, completed
+  score_pct     Int       @default(0)
+  xp_earned     Int       @default(0)
+  completed_at  DateTime?
+  attempt_count Int       @default(0)
+
+  user   User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, lesson_id])
+}
