@@ -27,12 +27,17 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install --include=optional
+          # Ensure Linux-specific tailwind oxide is present if missing
+          npm install @tailwindcss/oxide-linux-x64-gnu --save-optional --no-save || true
 
       - name: Build
         run: npm run build
         env:
-          NEXT_PUBLIC_API_URL: https://dheerajguptajapan-ui.github.io/eigo/api # Placeholder or user's public API
+          NEXT_PUBLIC_API_URL: https://dheerajguptajapan-ui.github.io/eigo/api
+          NODE_ENV: production
+          TURBO_TELEMETRY_DISABLED: 1 # Placeholder or user's public API
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
