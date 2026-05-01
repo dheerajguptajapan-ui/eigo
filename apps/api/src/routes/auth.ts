@@ -60,6 +60,35 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    // Mock Login: Any @gmail.com address can log in with any password
+    if (email.endsWith('@gmail.com')) {
+      let user = await prisma.user.findUnique({ where: { email } });
+      
+      // If user doesn't exist, create a mock one
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            email,
+            password_hash: await bcrypt.hash('mock_password', 10),
+            display_name: email.split('@')[0],
+          },
+        });
+      }
+      
+      const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+      res.status(200).json({ 
+        token, 
+        user: {
+          id: user.id,
+          email: user.email,
+          display_name: user.display_name,
+          current_level: user.current_level,
+          streak_count: user.streak_count
+        } 
+      });
+      return;
+    }
+
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       res.status(401).json({ error: 'Invalid credentials' });

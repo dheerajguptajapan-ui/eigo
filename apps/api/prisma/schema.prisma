@@ -7,28 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ─── Users ───────────────────────────────────────────────────────────────────
+
 model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
+  id            String   @id @default(uuid())
+  email         String   @unique
   password_hash String
   display_name  String
-  created_at    DateTime  @default(now())
-  current_level String    @default("beginner")
-  streak_count  Int       @default(0)
-  timezone      String    @default("Asia/Tokyo")
-  ui_language   String    @default("ja")
+  created_at    DateTime @default(now())
+  current_level String   @default("elementary") // elementary | chugaku | kougaku | advanced
+  streak_count  Int      @default(0)
+  timezone      String   @default("Asia/Tokyo")
+  ui_language   String   @default("ja")
 
   srs_cards       UserSRSCard[]
   lesson_progress LessonProgress[]
 }
 
+// ─── Vocabulary ───────────────────────────────────────────────────────────────
+
 model VocabularyItem {
-  id                   String   @id @default(uuid())
+  id                   String  @id @default(uuid())
   english_word         String
   ipa_phonetic         String?
   japanese_translation String
   audio_url            String?
-  cefr_level           String
+  cefr_level           String  // elementary | chugaku | kougaku | advanced
   frequency_rank       Int?
   part_of_speech       String
   example_en           String?
@@ -37,31 +41,85 @@ model VocabularyItem {
   srs_cards UserSRSCard[]
 }
 
+// ─── Grammar ─────────────────────────────────────────────────────────────────
+
+model GrammarItem {
+  id             String  @id @default(uuid())
+  pattern_en     String  // e.g. "Subject + is/am/are + adjective"
+  pattern_ja     String  // Japanese explanation
+  example_en     String  // e.g. "She is happy."
+  example_ja     String  // e.g. "彼女は幸せです。"
+  explanation_ja String  // Full Japanese explanation
+  level          String  // elementary | chugaku | kougaku | advanced
+  category       String  // tense | sentence_structure | modal | etc.
+
+  srs_cards UserSRSCard[]
+}
+
+// ─── Reading Passages ─────────────────────────────────────────────────────────
+
+model ReadingPassage {
+  id          String  @id @default(uuid())
+  title_en    String
+  title_ja    String
+  body_en     String  // The full English passage
+  summary_ja  String  // Japanese summary / translation hint
+  level       String  // elementary | chugaku | kougaku | advanced
+  topic       String  // daily_life | travel | science | culture | business
+  word_count  Int     @default(0)
+  questions   String  // JSON array of Q&A objects
+
+  srs_cards UserSRSCard[]
+}
+
+// ─── Listening Exercises ──────────────────────────────────────────────────────
+
+model ListeningExercise {
+  id           String  @id @default(uuid())
+  title_ja     String
+  transcript   String  // Full English transcript
+  audio_url    String? // URL to audio file (optional for now)
+  level        String  // elementary | chugaku | kougaku | advanced
+  topic        String
+  questions    String  // JSON array of Q&A
+  hint_ja      String? // Japanese hints
+
+  srs_cards UserSRSCard[]
+}
+
+// ─── SRS Cards ────────────────────────────────────────────────────────────────
+
 model UserSRSCard {
   id               String   @id @default(uuid())
   user_id          String
+  item_type        String   @default("vocabulary") // vocabulary | grammar | reading | listening
   item_id          String
-  item_type        String   @default("vocabulary") // vocabulary, grammar, etc.
   due_date         DateTime @default(now())
   interval_days    Float    @default(1.0)
   ease_factor      Float    @default(2.5)
   review_count     Int      @default(0)
   last_reviewed_at DateTime?
 
-  user            User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  vocabulary_item VocabularyItem @relation(fields: [item_id], references: [id], onDelete: Cascade)
+  user              User               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  vocabulary_item   VocabularyItem?    @relation(fields: [item_id], references: [id], onDelete: Cascade)
+  grammar_item      GrammarItem?       @relation(fields: [item_id], references: [id], onDelete: Cascade)
+  reading_passage   ReadingPassage?    @relation(fields: [item_id], references: [id], onDelete: Cascade)
+  listening_exercise ListeningExercise? @relation(fields: [item_id], references: [id], onDelete: Cascade)
 
   @@index([user_id, due_date])
+  @@index([user_id, item_type])
 }
 
+// ─── Lessons ──────────────────────────────────────────────────────────────────
+
 model Lesson {
-  id             String   @id @default(uuid())
+  id             String @id @default(uuid())
   unit_id        String
   title_ja       String
-  level          String
-  track          String   // vocab, grammar, speaking, listening
-  exercise_count Int      @default(0)
-  xp_reward      Int      @default(50)
+  level          String // elementary | chugaku | kougaku | advanced
+  track          String // vocabulary | grammar | reading | listening
+  exercise_count Int    @default(0)
+  xp_reward      Int    @default(50)
 
   progress LessonProgress[]
 }
@@ -70,7 +128,7 @@ model LessonProgress {
   id            String    @id @default(uuid())
   user_id       String
   lesson_id     String
-  status        String    @default("in_progress") // in_progress, completed
+  status        String    @default("in_progress")
   score_pct     Int       @default(0)
   xp_earned     Int       @default(0)
   completed_at  DateTime?

@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Flame, Star, BookOpen, GraduationCap, ChevronRight, Trophy } from "lucide-react";
+import { Flame, Star, BookOpen, GraduationCap, ChevronRight, Trophy, Map } from "lucide-react";
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
@@ -157,6 +157,9 @@ export default function Dashboard() {
             </div>
             <Button asChild className="w-full mt-8 bg-slate-900 hover:bg-slate-800 text-white font-bold py-6 rounded-xl shadow-lg transition-all active:scale-[0.98]">
               <Link href="/chat">会話練習を始める</Link>
+            </Button>
+            <Button asChild variant="outline" className="w-full mt-3 border-indigo-200 text-indigo-700 hover:bg-indigo-50 font-bold py-5 rounded-xl">
+              <Link href="/curriculum"><Map className="mr-2 h-4 w-4" />カリキュラムを見る</Link>
             </Button>
           </CardContent>
         </Card>

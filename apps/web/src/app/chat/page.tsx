@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { ChevronLeft, Send, Sparkles, User, MessageCircle } from "lucide-react"
 import Link from "next/link"
+import { ClickableText } from "@/components/WordTooltip"
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<any[]>([])
@@ -119,7 +120,10 @@ export default function ChatPage() {
                 {msg.role === 'user' ? <User className="h-4 w-4 text-white" /> : <Sparkles className="h-4 w-4 text-slate-500" />}
               </div>
               <div className={`p-4 rounded-3xl font-medium leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-white text-slate-800 rounded-bl-none'}`}>
-                {msg.content}
+                {msg.role === 'assistant'
+                  ? <ClickableText text={msg.content} />
+                  : msg.content
+                }
               </div>
             </div>
           </div>

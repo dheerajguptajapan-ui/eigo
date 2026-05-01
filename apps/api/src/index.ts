@@ -21,10 +21,12 @@ import { authenticateToken } from './middleware/auth';
 
 // Mount modular routes here
 
+import lessonRoutes from './routes/lessons';
+
 app.use('/auth', authRoutes);
 app.use('/srs', authenticateToken, srsRoutes);
 app.use('/ai', authenticateToken, aiRoutes);
-// app.use('/lessons', lessonRoutes);
+app.use('/lessons', authenticateToken, lessonRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
